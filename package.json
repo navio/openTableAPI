@@ -1,0 +1,21 @@
+{
+  "name": "reservationScraper",
+  "version": "0.0.0",
+  "description": "e’re interested in finding all of the restaurants in an area that have limited availability during peak dining times.",
+  "main": "app.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "keywords": [
+    "NodeJS",
+    "Reserve",
+    "Challenge"
+  ],
+  "author": "Alberto Navarro",
+  "license": "MIT",
+  "dependencies": {
+     "express"    : "latest",
+     "request"    : "latest",
+     "cheerio"    : "latest"
+  }
+}
