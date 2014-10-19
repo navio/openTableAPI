@@ -1,0 +1,77 @@
+<html>
+  <head>
+    <title>Node.js Reservation Scrape</title>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+  </head>
+  <body>
+      <body>
+
+
+    <!-- Part 1: Wrap all page content here -->
+    <div id="wrap">
+
+      <!-- Begin page content -->
+      <div class="container">
+        <div class="page-header">
+          <h1>Node.js Reservation Scrape</h1>
+        </div>
+        <p class="lead">Fill the values to submit a query</p>
+
+        <form class="navbar-form navbar-left" method="get" action="/scrapper/form" role="search">
+          <div class="form-group">
+
+              <input class="form-control" placeholder="Date and Time" name="datetime" type="datetime">
+              <input class="form-control" placeholder="# of Guests" type="number" name="cover" >
+              <input class="form-control" placeholder="CityID" name="metroid" type="number">
+
+
+          </div>
+          <button type="submit" class="btn btn-default">Submit</button>
+
+
+
+        </form>
+      </div>
+      <div class="container">
+        <div class="panel panel-default">
+          <!-- Default panel contents -->
+          <div class="panel-heading">Results</div>
+
+          <!-- Table -->
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Neighborhood</th>
+                <th>Cuisine</th>
+                <th>Reviews</th>
+                <th>Time Windows</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>Mark</td>
+                <td>Otto</td>
+                <td>@mdo</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>Jacob</td>
+                <td>Thornton</td>
+                <td>@fat</td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>Larry</td>
+                <td>the Bird</td>
+                <td>@twitter</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+   </div>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  </body>
+</html>

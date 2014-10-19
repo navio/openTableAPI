@@ -9,12 +9,12 @@ module.exports = function(url, fn) {
             var $ = cheerio.load(html);
             var table = [];
 
-            //scrape;
+            //scrape;  // not great for internalization.
             $('#search_results_table.table tr').each(function(i, element){
 
               var name          = $(element).find('.rest-name').text();
               var hood_cuisine  = $(element).find('.rest-content div').text().split(" | ");
-              var reviews       = $(element).find('.reviews').text().trim();
+              var reviews       = $(element).find('.reviews').text().replace(' reviews','').trim();
               var link          = $(element).find('.rest-content a').attr('href');
               var times_raw     = $(element).find('.timeslots li span.time');
               var times         = [];
@@ -63,7 +63,7 @@ module.exports = function(url, fn) {
           flag = true;
       }else{
           if(flag){  // when window is closed.
-              windows.push({w:minuteDistance(prev,times[i]),p:prev ,t: times[i]});
+              windows.push(minuteDistance(prev,times[i]));
               flag = false;
           }
           prev = times[i];
@@ -72,7 +72,7 @@ module.exports = function(url, fn) {
     }
 
    if(flag){ // final case.
-      windows.push({w:minuteDistance(prev,ends),p:prev ,t: ends});
+      windows.push(minuteDistance(prev,ends));
       flag = false;
    }
 
