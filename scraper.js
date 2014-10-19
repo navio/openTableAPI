@@ -62,7 +62,7 @@ module.exports = function(url, fn) {
       if (times[i] == ''){
           flag = true;
       }else{
-          if(flag){
+          if(flag){  // when window is closed.
               windows.push({w:minuteDistance(prev,times[i]),p:prev ,t: times[i]});
               flag = false;
           }
@@ -71,7 +71,7 @@ module.exports = function(url, fn) {
 
     }
 
-   if(flag){
+   if(flag){ // final case.
       windows.push({w:minuteDistance(prev,ends),p:prev ,t: ends});
       flag = false;
    }

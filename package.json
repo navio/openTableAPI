@@ -14,8 +14,9 @@
   "author": "Alberto Navarro",
   "license": "MIT",
   "dependencies": {
-     "express"    : "latest",
-     "request"    : "latest",
-     "cheerio"    : "latest"
+    "express": "latest",
+    "request": "latest",
+    "cheerio": "latest",
+    "json-2-csv": "~1.0.6"
   }
 }
