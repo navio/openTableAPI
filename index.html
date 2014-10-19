@@ -7,10 +7,8 @@
       <body>
 
 
-    <!-- Part 1: Wrap all page content here -->
     <div id="wrap">
 
-      <!-- Begin page content -->
       <div class="container">
         <div class="page-header">
           <h1>Node.js Reservation Scrape</h1>
@@ -20,15 +18,12 @@
         <form class="navbar-form navbar-left" method="get" action="/scrapper/form" role="search">
           <div class="form-group">
 
-              <input class="form-control" placeholder="Date and Time" name="datetime" type="datetime">
-              <input class="form-control" placeholder="# of Guests" type="number" name="cover" >
-              <input class="form-control" placeholder="CityID" name="metroid" type="number">
-
+              <input class="form-control" placeholder="Date and Time" name="datetime" id="date" type="datetime">
+              <input class="form-control" placeholder="# of Guests" type="number" id="cover" name="cover" >
+              <input class="form-control" placeholder="CityID" name="cityid" id="cityid" type="number">
 
           </div>
           <button type="button" class="btn btn-default" id="searchBtn">Search</button>
-
-
 
         </form>
       </div>
@@ -43,7 +38,6 @@
 
           <p class="lead hide text-center" id="loading">Loading Content...</p>
 
-          <!-- Table -->
           <table class="table hide">
             <thead>
               <tr>
@@ -61,17 +55,28 @@
         </div>
       </div>
    </div>
+
     <script>
-    // It should reside different file. If doesn't
+    // It should reside different file. for the sake of time.
     document.querySelector('#searchBtn').addEventListener('click', renderResults );
 
     function renderResults(el){
 
+        var date    = document.querySelector("#date").value;
+        var cityid  = document.querySelector("#cityid").value;
+        var cover   = document.querySelector("#cover").value;
+        var qString = "?cover="+cover+"&cityid="+cityid+"&datetime="+date;
+
+        document.querySelector("#json").href = '/json'+qString;
+        document.querySelector("#csv").href  = '/csv'+qString;
+
         showContent('#results');
         toggleContent('#loading');
 
+
+
         request = new XMLHttpRequest();
-        request.open('GET', '/json', true);
+        request.open('GET', '/json'+qString, true);
 
         request.onload = function() {
 
@@ -82,7 +87,7 @@
             toggleContent('#loading');
 
             var domRow = document.querySelector('#content-results');
-            console.log(data)
+
             domRow.innerHTML = '';
             var contentRows = '';
             for(row in data){

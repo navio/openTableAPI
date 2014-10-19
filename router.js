@@ -8,11 +8,11 @@ router.get('/',function(req,res){
   res.sendFile(__dirname + '/index.html');
 });
 
-router.get('/raw', function(req, res){  // Extra json link
+router.get('/raw/', function(req, res){  // Extra json link
 
-   cover = req.params.cover || 2; // OpenTable default.
-   datetime = req.params.datetime || '10/19/2014 7:00%20PM'; // current time from requester.
-   metroid = req.param.metroid || 4; //can be replaced to requester location
+   cover = req.query.cover || 2; // OpenTable default.
+   datetime = req.query.datetime || '10-19-2014 7:00%20PM'; // current time from requester.
+   metroid = req.query.cityid || 4; //can be replaced to requester location
 
    scraper(util.urlGenerator(cover,datetime,metroid,'false'),
             function(err,table){
@@ -29,9 +29,9 @@ router.get('/raw', function(req, res){  // Extra json link
 
 router.get('/json', function(req, res){  // Extra json link
 
-   cover = req.params.cover || 2; // OpenTable default.
-   datetime = req.params.datetime || '10/19/2014 7:00%20PM'; // current time from requester.
-   metroid = req.param.metroid || 4; //can be replaced to requester location
+   cover = req.query.cover || 2; // OpenTable default.
+   datetime = req.query.datetime || '10-19-2014 7:00%20PM'; // current time from requester.
+   metroid = req.query.cityid || 4; //can be replaced to requester location
 
    scraper(util.urlGenerator(cover,datetime,metroid,'false'),
             function(err,table){
@@ -47,11 +47,11 @@ router.get('/json', function(req, res){  // Extra json link
 });
 
 
-router.get('/csv', function(req, res){
+router.get('/csv/', function(req, res){
 
-   cover = req.params.cover || 2; // OpenTable default.
-   datetime = req.params.datetime || '10/18/2014 7:00%20PM'; // current time from requester.
-   metroid = req.param.metroid || 4; //can be replaced to requester location
+   cover = req.query.cover || 2; // OpenTable default.
+   datetime = req.query.datetime || '10/18/2014 7:00%20PM'; // current time from requester.
+   metroid = req.query.cityid || 4; //can be replaced to requester location
 
    var converter = require('json-2-csv');
 
