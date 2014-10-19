@@ -14,7 +14,7 @@ module.exports = function(url, fn) {
 
               var name          = $(element).find('.rest-name').text();
               var hood_cuisine  = $(element).find('.rest-content div').text().split(" | ");
-              var reviews       = $(element).find('.reviews').text().replace(' reviews','').trim();
+              var reviews       = $(element).find('.reviews').text().trim();
               var link          = $(element).find('.rest-content a').attr('href');
               var times_raw     = $(element).find('.timeslots li span.time');
               var times         = [];

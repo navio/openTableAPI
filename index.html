@@ -26,19 +26,23 @@
 
 
           </div>
-          <button type="submit" class="btn btn-default">Submit</button>
+          <button type="button" class="btn btn-default" id="searchBtn">Search</button>
 
 
 
         </form>
       </div>
-      <div class="container">
+      <div class="clearfix"></div>
+      <div id="results" class="container hide">
+
         <div class="panel panel-default">
           <!-- Default panel contents -->
           <div class="panel-heading">Results</div>
 
+          <p class="lead hide" id="loading">Loading Content...</p>
+
           <!-- Table -->
-          <table class="table">
+          <table class="table hide">
             <thead>
               <tr>
                 <th>Name</th>
@@ -48,30 +52,82 @@
                 <th>Time Windows</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td>1</td>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td>Larry</td>
-                <td>the Bird</td>
-                <td>@twitter</td>
-              </tr>
+            <tbody id="content-results">
+
             </tbody>
           </table>
         </div>
       </div>
    </div>
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script>
+    // It should reside different file. If doesn't
+    document.querySelector('#searchBtn').addEventListener('click', renderResults );
+
+    function renderResults(el){
+
+
+        toggleContent('#results');
+        toggleContent('#loading');
+
+
+        request = new XMLHttpRequest();
+        request.open('GET', '/json', true);
+
+        request.onload = function() {
+
+          if (request.status >= 200 && request.status < 400){
+            data = JSON.parse(request.responseText);
+            console.log(data);
+
+            toggleContent('.table');
+            toggleContent('#loading');
+
+            var domRow = document.querySelector('#content-results');
+            domRow.innerHTML = '';
+
+            for(row in data){
+              var row = '<tr>'+
+                        '<td>'+data[row].name+'</td>'+
+                        '<td>'+data[row].neighborhood+'</td>'+
+                        '<td>'+data[row].cuisine+'</td>'+
+                        '<td>'+data[row].reviews+'</td>'+
+                        '<td>'+data[row].windows.join('|')+'</td>'+
+                        '</tr>';
+              domRow.insertAdjacentHTML('afterend', row);
+            }
+
+          } else {
+            console.error('We got and error. Server may be down.')
+          }
+        };
+
+        request.onerror = function() {
+          // There was a connection error of some sort
+          console.error('We have a problem, probably in the JS')
+        };
+
+        request.send();
+    }
+
+    function toggleContent(selector){
+      var el = document.querySelector(selector);
+      var className = 'hide';
+
+      if (el.classList) {
+        el.classList.toggle(className);
+      } else {
+        var classes = el.className.split(' ');
+        var existingIndex = classes.indexOf(className);
+
+        if (existingIndex >= 0)
+          classes.splice(existingIndex, 1);
+        else
+          classes.push(className);
+
+        el.className = classes.join(' ');
+      }
+    }
+
+    </script>
   </body>
 </html>

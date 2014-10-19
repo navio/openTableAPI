@@ -9,7 +9,7 @@ router.get('/',function(req,res){
 });
 
 
-router.get('/scrape/json', function(req, res){  // Extra json link
+router.get('/json', function(req, res){  // Extra json link
 
    cover = req.params.cover || 2; // OpenTable default.
    datetime = req.params.datetime || '10/18/2014 7:00%20PM'; // current time from requester.
@@ -24,7 +24,7 @@ router.get('/scrape/json', function(req, res){  // Extra json link
 });
 
 
-router.get('/scrape/csv', function(req, res){
+router.get('/csv', function(req, res){
 
    cover = req.params.cover || 2; // OpenTable default.
    datetime = req.params.datetime || '10/18/2014 7:00%20PM'; // current time from requester.
@@ -36,7 +36,7 @@ router.get('/scrape/csv', function(req, res){
            function(err,table){
 
               var toConvert = table.map(function(item){ // Cleaning view to adjust requirements.
-                return {
+                return {                                // Given the time for the project, left here. toRefactor
 
                           Name:item.name,
                           Neighborhood:item.neighborhood,
