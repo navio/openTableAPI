@@ -37,9 +37,11 @@
 
         <div class="panel panel-default">
           <!-- Default panel contents -->
-          <div class="panel-heading">Results</div>
+          <div class="panel-heading">Results
+            <div class="text-right"><a id="csv" href="#">CSV</a> | <a id="json" href="#">JSON</a></div>
+          </div>
 
-          <p class="lead hide" id="loading">Loading Content...</p>
+          <p class="lead hide text-center" id="loading">Loading Content...</p>
 
           <!-- Table -->
           <table class="table hide">
@@ -65,10 +67,8 @@
 
     function renderResults(el){
 
-
-        toggleContent('#results');
+        showContent('#results');
         toggleContent('#loading');
-
 
         request = new XMLHttpRequest();
         request.open('GET', '/json', true);
@@ -77,24 +77,25 @@
 
           if (request.status >= 200 && request.status < 400){
             data = JSON.parse(request.responseText);
-            console.log(data);
 
-            toggleContent('.table');
+            showContent('.table');
             toggleContent('#loading');
 
             var domRow = document.querySelector('#content-results');
+            console.log(data)
             domRow.innerHTML = '';
-
+            var contentRows = '';
             for(row in data){
               var row = '<tr>'+
-                        '<td>'+data[row].name+'</td>'+
-                        '<td>'+data[row].neighborhood+'</td>'+
-                        '<td>'+data[row].cuisine+'</td>'+
-                        '<td>'+data[row].reviews+'</td>'+
-                        '<td>'+data[row].windows.join('|')+'</td>'+
+                        '<td><a href="'+data[row].Link+'">'+data[row].Name+'</td></a>'+
+                        '<td>'+data[row].Neighborhood+'</td>'+
+                        '<td>'+data[row].Cuisine+'</td>'+
+                        '<td>'+data[row].Reviews+'</td>'+
+                        '<td>'+data[row].Window+'</td>'+
                         '</tr>';
-              domRow.insertAdjacentHTML('afterend', row);
+                        contentRows = contentRows + row;;
             }
+            domRow.innerHTML = contentRows;
 
           } else {
             console.error('We got and error. Server may be down.')
@@ -126,6 +127,16 @@
 
         el.className = classes.join(' ');
       }
+    }
+
+    function showContent(selector){
+      var el = document.querySelector(selector);
+      var className = 'hide';
+
+      if (el.classList)
+        el.classList.remove(className);
+      else
+        el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
     }
 
     </script>
