@@ -19,14 +19,13 @@ module.exports = function(url, fn) {
               var times_raw     = $(element).find('.timeslots li span.time');
               var times         = [];
 
+              if(name === '' ) return;
+
               times_raw.each(function(i){
                    times.push( $(this).text().trim().replace(" PM", "") );
               });
 
               var windows = windowCalculator(times);
-
-              if(name === '' ) return;
-
 
               table.push({
                            name: name,
@@ -51,6 +50,7 @@ module.exports = function(url, fn) {
   // Assume the start point is   4:59pm
   // Assume the latest point is 10:01pm
   function windowCalculator(times){
+    if(times.length == 0) return [302];
     var start = '4:59', ends = '10:01', prev;
     var windows = []; var flag = false;
 

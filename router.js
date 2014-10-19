@@ -8,18 +8,36 @@ router.get('/',function(req,res){
   res.sendFile(__dirname + '/index.html');
 });
 
+router.get('/raw', function(req, res){  // Extra json link
+
+   cover = req.params.cover || 2; // OpenTable default.
+   datetime = req.params.datetime || '10/19/2014 7:00%20PM'; // current time from requester.
+   metroid = req.param.metroid || 4; //can be replaced to requester location
+
+   scraper(util.urlGenerator(cover,datetime,metroid,'false'),
+            function(err,table){
+              if(err) res.send('err'); //probably insecure but for dev purpose left.
+              var openTable = table;
+              scraper(util.urlGenerator(cover,datetime,metroid,'true'), // Totally forgot about this || toREFACTOR
+                function(err,table){
+                  if(err) res.send('err');
+                  var joinedTables = openTable.concat(table);
+                  res.json(joinedTables);
+                });
+            });
+});
 
 router.get('/json', function(req, res){  // Extra json link
 
    cover = req.params.cover || 2; // OpenTable default.
-   datetime = req.params.datetime || '10/18/2014 7:00%20PM'; // current time from requester.
+   datetime = req.params.datetime || '10/19/2014 7:00%20PM'; // current time from requester.
    metroid = req.param.metroid || 4; //can be replaced to requester location
 
-   scraper(util.urlGenerator(cover,datetime,metroid,false),
+   scraper(util.urlGenerator(cover,datetime,metroid,'false'),
             function(err,table){
               if(err) res.send('err'); //probably insecure but for dev purpose left.
               var openTable = table;
-              scraper(util.urlGenerator(cover,datetime,metroid,true), // Totally forgot about this || toREFACTOR
+              scraper(util.urlGenerator(cover,datetime,metroid,'true'), // Totally forgot about this || toREFACTOR
                 function(err,table){
                   if(err) res.send('err');
                   var joinedTables = openTable.concat(table);
