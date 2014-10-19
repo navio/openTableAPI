@@ -49,6 +49,7 @@ module.exports = function(url, fn) {
 
   // Assume the start point is   4:59pm
   // Assume the latest point is 10:01pm
+  // Exist in here to not create depedency to utils
   function windowCalculator(times){
     if(times.length == 0) return [302];
     var start = '4:59', ends = '10:01', prev;

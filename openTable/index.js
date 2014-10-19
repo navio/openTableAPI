@@ -8,7 +8,7 @@ router.get('/',function(req,res){
   res.sendFile(__dirname + '/index.html');
 });
 
-router.get('/raw/', function(req, res){  // Extra json link
+router.get('/raw', function(req, res){  // Raw to debug and other projects
 
    cover = req.query.cover || 2; // OpenTable default.
    datetime = req.query.datetime || '10-19-2014 7:00%20PM'; // current time from requester.
@@ -27,11 +27,11 @@ router.get('/raw/', function(req, res){  // Extra json link
             });
 });
 
-router.get('/json', function(req, res){  // Extra json link
+router.get('/json', function(req, res){
 
-   cover = req.query.cover || 2; // OpenTable default.
+   cover = req.query.cover || 2; // OpenTable's default.
    datetime = req.query.datetime || '10-19-2014 7:00%20PM'; // current time from requester.
-   metroid = req.query.cityid || 4; //can be replaced to requester location
+   metroid = req.query.cityid || 4; //can be replaced to requester location || Challenge example
 
    scraper(util.urlGenerator(cover,datetime,metroid,'false'),
             function(err,table){
@@ -41,17 +41,16 @@ router.get('/json', function(req, res){  // Extra json link
                 function(err,table){
                   if(err) res.send('err');
                   var joinedTables = openTable.concat(table);
-                  res.json(cleanView(joinedTables));
+                  res.json(util.cleanView(joinedTables));
                 });
             });
 });
 
+router.get('/csv', function(req, res){
 
-router.get('/csv/', function(req, res){
-
-   cover = req.query.cover || 2; // OpenTable default.
-   datetime = req.query.datetime || '10/18/2014 7:00%20PM'; // current time from requester.
-   metroid = req.query.cityid || 4; //can be replaced to requester location
+   cover = req.query.cover || 2;
+   datetime = req.query.datetime || '10-19-2014 7:00%20PM';
+   metroid = req.query.cityid || 4;
 
    var converter = require('json-2-csv');
 
@@ -63,32 +62,10 @@ router.get('/csv/', function(req, res){
                 function(err,table){
                   if(err) res.send('err');
                   var joinedTables = openTable.concat(table);
-                  converter.json2csv(cleanView(table), function(err,csv){ // convert to CSV
+                  converter.json2csv(util.cleanView(table), function(err,csv){ // convert to CSV
                       res.send(new Buffer(csv));
                   });
                 });
             });
 
 });
-
-
-function cleanView(dirtyArray){
-
-  return dirtyArray.map(function(item){ // Cleaning view to adjust requirements.
-
-    var cleanWindow = item.windows.join('|');
-    if(cleanWindow === '') cleanWindow = 0 ;
-    if(item.reviews === '') item.reviews = 'No Reviews'
-
-    return {
-              Name:item.name,
-              Neighborhood:item.neighborhood,
-              Cuisine:item.cuisine,
-              Reviews: item.reviews,
-              Window: cleanWindow,
-              Link: item.link
-      };
-  });
-
-
-}

@@ -1,8 +1,7 @@
 var express = require('express');
 var app     = express();
 
-app.use(require('./router.js'));
-
+app.use(require(__dirname+'/openTable'));
 
 app.listen('8081')
 
