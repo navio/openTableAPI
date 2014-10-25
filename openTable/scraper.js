@@ -13,7 +13,32 @@ module.exports = function(url,cb) {
         }else{  cb(error,null) }
 
     });
+  /**
 
+  schema = {
+  
+    options = {
+      url: 'url.com/ass/asa',
+      method: 'get',
+      data : {
+        container:{
+            selector: '#search_results_table.table tr',
+            multiple: true,
+            children: {
+                name: '.rest-name',
+                hood_cuisine: '.rest-content div',
+                reviews: '.reviews',
+                link: { selector: '.rest-content a', attr: 'href' },
+                times: { selector: '.timeslots li span.time' multiple: true }
+            }
+        }
+      }
+    }
+
+  }
+
+
+  **/
   function scrape($){
 
         var table = [];

@@ -3,7 +3,7 @@ module.exports = {
 
   newDateFormat: function(){
               var d = new Date();
-              return d.getMonth()+'/'+d.getDate()+'/'+d.getFullYear()+' '+d.getHours()+':'+d.getMinutes();
+              return (d.getMonth()+1)+'/'+d.getDate()+'/'+d.getFullYear()+' '+d.getHours()+':'+d.getMinutes();
   },
 
   urlGenerator: function(cover,datetime,metroid,full){

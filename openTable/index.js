@@ -12,7 +12,7 @@ router.get('/',function(req,res){
 router.get('/raw', function(req, res){  // Raw to debug and other projects
 
    cover = req.query.cover || 2; // OpenTable default.
-   datetime = req.query.datetime || '10-25-2014 7:00%20PM'; // current time from requester.
+   datetime = req.query.datetime || util.newDateFormat(); // current time from requester.
    metroid = req.query.cityid || 4; //can be replaced to requester location
 
    async.map([util.urlGenerator(cover,datetime,metroid,'false'),
@@ -30,7 +30,7 @@ router.get('/raw', function(req, res){  // Raw to debug and other projects
 router.get('/json', function(req, res){
 
    cover = req.query.cover || 2; // OpenTable's default.
-   datetime = req.query.datetime || '10-25-2014 7:00%20PM'; // current time from requester.
+   datetime = req.query.datetime || util.newDateFormat(); // current time from requester.
    metroid = req.query.cityid || 4; //can be replaced to requester location || Challenge example
 
    async.map([util.urlGenerator(cover,datetime,metroid,'false'),
@@ -47,7 +47,7 @@ router.get('/json', function(req, res){
 router.get('/csv', function(req, res){
 
    cover = req.query.cover || 2;
-   datetime = req.query.datetime || '10-25-2014 7:00%20PM';
+   datetime = req.query.datetime || util.newDateFormat();
    metroid = req.query.cityid || 4;
 
    var converter = require('json-2-csv');

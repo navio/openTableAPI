@@ -1,6 +1,6 @@
 {
   "name": "reservationScraper",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "We’re interested in finding all of the restaurants in an area that have limited availability during peak dining times.",
   "main": "app.js",
   "scripts": {
