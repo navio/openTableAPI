@@ -1,4 +1,5 @@
 var router  = require('express').Router();
+var async   = require('async');
 var util    = require('./util.js');
 var scraper = require('./scraper.js');
 
@@ -11,61 +12,55 @@ router.get('/',function(req,res){
 router.get('/raw', function(req, res){  // Raw to debug and other projects
 
    cover = req.query.cover || 2; // OpenTable default.
-   datetime = req.query.datetime || '10-19-2014 7:00%20PM'; // current time from requester.
+   datetime = req.query.datetime || '10-25-2014 7:00%20PM'; // current time from requester.
    metroid = req.query.cityid || 4; //can be replaced to requester location
 
-   scraper(util.urlGenerator(cover,datetime,metroid,'false'),
-            function(err,table){
-              if(err) res.send('err'); //probably insecure but for dev purpose left.
-              var openTable = table;
-              scraper(util.urlGenerator(cover,datetime,metroid,'true'), // Totally forgot about this || toREFACTOR
-                function(err,table){
-                  if(err) res.send('err');
-                  var joinedTables = openTable.concat(table);
-                  res.json(joinedTables);
-                });
-            });
+   async.map([util.urlGenerator(cover,datetime,metroid,'false'),
+               util.urlGenerator(cover,datetime,metroid,'true')],
+               scraper,
+               function(err,table){
+                 if(err) console.log('there was an error'+err);
+                 var tables = table[0].concat(table[1]);
+                 res.json(tables);
+               }
+             );
+
 });
 
 router.get('/json', function(req, res){
 
    cover = req.query.cover || 2; // OpenTable's default.
-   datetime = req.query.datetime || '10-19-2014 7:00%20PM'; // current time from requester.
+   datetime = req.query.datetime || '10-25-2014 7:00%20PM'; // current time from requester.
    metroid = req.query.cityid || 4; //can be replaced to requester location || Challenge example
 
-   scraper(util.urlGenerator(cover,datetime,metroid,'false'),
-            function(err,table){
-              if(err) res.send('err'); //probably insecure but for dev purpose left.
-              var openTable = table;
-              scraper(util.urlGenerator(cover,datetime,metroid,'true'), // Totally forgot about this || toREFACTOR
-                function(err,table){
-                  if(err) res.send('err');
-                  var joinedTables = openTable.concat(table);
-                  res.json(util.cleanView(joinedTables));
-                });
-            });
+   async.map([util.urlGenerator(cover,datetime,metroid,'false'),
+               util.urlGenerator(cover,datetime,metroid,'true')],
+               scraper,
+               function(err,table){
+                 if(err) console.log('there was an error'+err);
+                 var tables = table[0].concat(table[1]);
+                 res.json(util.cleanView(tables));
+               }
+             );
 });
 
 router.get('/csv', function(req, res){
 
    cover = req.query.cover || 2;
-   datetime = req.query.datetime || '10-19-2014 7:00%20PM';
+   datetime = req.query.datetime || '10-25-2014 7:00%20PM';
    metroid = req.query.cityid || 4;
 
    var converter = require('json-2-csv');
 
-   scraper(util.urlGenerator(cover,datetime,metroid,false),
-            function(err,table){
-              if(err) res.send('err'); //probably insecure but for dev purpose left.
-              var openTable = table;
-              scraper(util.urlGenerator(cover,datetime,metroid,true), // Totally forgot about this || toREFACTOR
-                function(err,table){
-                  if(err) res.send('err');
-                  var joinedTables = openTable.concat(table);
-                  converter.json2csv(util.cleanView(table), function(err,csv){ // convert to CSV
-                      res.send(new Buffer(csv));
-                  });
+   async.map([util.urlGenerator(cover,datetime,metroid,'false'),
+              util.urlGenerator(cover,datetime,metroid,'true')],
+              scraper,
+              function(err,table){
+                if(err) console.log('there was an error'+err);
+                var tables = table[0].concat(table[1]);
+                converter.json2csv(util.cleanView(table), function(err,csv){ // convert to CSV
+                    res.send(new Buffer(csv));
                 });
-            });
-
+              }
+            );
 });
