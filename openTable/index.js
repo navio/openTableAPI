@@ -10,8 +10,8 @@ router.get('/',function(req,res){
 });
 
 router.get('/experiment', function(req,res){
-  scraper(function(){
-    res.json('das');
+  scraper(function(data){
+    res.json(data);
   });
 });
 

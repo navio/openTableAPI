@@ -2,11 +2,11 @@ var request = require('request');
 var cheerio = require('cheerio');
 var async   = require('async');
 
-module.exports = function(url,cb) {
+module.exports = function(cb) {
 
-  cb(schemaReader(schema));
 
-  var schema = {
+
+  var schema = [
     request : {
       url: 'url.com/ass/asa',
       method: 'get',
@@ -24,14 +24,18 @@ module.exports = function(url,cb) {
         }
       }
     }
-  };
+  ];
+  cb(schemaReader(schema));
 
   function schemaReader(elements){
-
+    console.log(element);
     for( var element in elements){
+
       if (!requestValidity(element)) return false;
+      console.log('dss')
       request(element.url,
               function(error, response, html){
+                              console.log('ass')
                               parser(html,element.data);
               });
     }
@@ -59,12 +63,12 @@ module.exports = function(url,cb) {
           }
 
           if(element.children){
-            return ['value': finalValue , 'children': parser(el,element.children) ]; // return object
+            return {value: finalValue , children: parser(el,element.children) }; // return object
           }
 
           return finalValue;
         });
-      }
+      });
     }
 
   }
