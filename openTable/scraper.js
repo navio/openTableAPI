@@ -4,11 +4,26 @@ var async   = require('async');
 
 module.exports = function(cb) {
 
-
-
-  var schema = [
+  var schema = {
     request : {
-      url: 'url.com/ass/asa',
+      url: 'http://www.opentable.com/s/?datetime=2014-10-11 7:30&covers=2&metroid=4&showmap=false&&popularityalgorithm=NameSearches&tests=EnableMapview,ShowPopularitySortOption,srs,customfilters&sort=Popularity&excludefields=Description',
+      method: 'get',
+      data : {
+        container:{
+            selector: '#search_results_table.table tr',
+            multiple: true,
+            children: {
+                name: '.rest-name',
+                hood_cuisine: '.rest-content div',
+                reviews: '.reviews',
+                link: { selector: '.rest-content a', attr: 'href' },
+                times: { selector: '.timeslots li span.time', multiple: true }
+            }
+        }
+      }
+    },
+    request2 : {
+      url: 'http://www.opentable.com/s/?datetime=2014-10-11 7:30&covers=2&metroid=4&showmap=false&&popularityalgorithm=NameSearches&tests=EnableMapview,ShowPopularitySortOption,srs,customfilters&sort=Popularity&excludefields=Description',
       method: 'get',
       data : {
         container:{
@@ -24,32 +39,41 @@ module.exports = function(cb) {
         }
       }
     }
-  ];
-  cb(schemaReader(schema));
+  };
+cb(schemaReader(schema));
 
   function schemaReader(elements){
-    console.log(element);
-    for( var element in elements){
 
-      if (!requestValidity(element)) return false;
-      console.log('dss')
-      request(element.url,
+    for( var id in elements){
+      var els = elements[id];
+      if (!requestValidity(els)) return false;
+      var req_sent = els.data;
+      request(els.url,
               function(error, response, html){
-                              console.log('ass')
-                              parser(html,element.data);
+                              engine(html,req_sent);
               });
     }
 
     function requestValidity(item){
       if(!item.url) return false;
       if(!item.data) return false;
+      return true;
     }
 
-    function parser(data,schema){
+    function objectToArray(obj){
+        var arr = [];
+        for(var al in obj){
+          arr.push(obj[al]);
+        }
+        return arr;
+    }
+
+    function engine(data,schema){
+
       var $ = cheerio.load(data);  // check to not create a new object everytime.
+      var _schemal = objectToArray(schema);
 
-      return schema.map(function(element){
-
+      var das = _schemal.map(function(element){
         var toSelect = element.selector ? element.selector: element; // simple leaf or not;
         var el = $(toSelect);
 
@@ -63,12 +87,13 @@ module.exports = function(cb) {
           }
 
           if(element.children){
-            return {value: finalValue , children: parser(el,element.children) }; // return object
+            return {value: finalValue , children: engine(el,element.children) }; // return object
           }
-
           return finalValue;
         });
+        
       });
+
     }
 
   }
