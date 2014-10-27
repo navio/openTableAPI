@@ -1,0 +1,19 @@
+schema = {
+  request = {
+    url: 'url.com/ass/asa',
+    method: 'get',
+    data : {
+      container:{
+          selector: '#search_results_table.table tr',
+          children: {
+              name: '.rest-name',
+              hood_cuisine: '.rest-content div',
+              reviews: '.reviews',
+              link: { selector: '.rest-content a', attr: 'href' },
+              times: { selector: '.timeslots li span.time' }
+          }
+      }
+    }
+  }
+
+}
