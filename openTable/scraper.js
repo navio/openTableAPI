@@ -61,6 +61,7 @@ cb(schemaReader(schema));
     }
 
     function objectToArray(obj){
+        if(obj instanceof String ) return [obj];
         var arr = [];
         for(var al in obj){
           arr.push(obj[al]);
@@ -72,26 +73,32 @@ cb(schemaReader(schema));
 
       var $ = cheerio.load(data);  // check to not create a new object everytime.
       var _schemal = objectToArray(schema);
+      console.log('got here',_schemal);
 
-      var das = _schemal.map(function(element){
-        var toSelect = element.selector ? element.selector: element; // simple leaf or not;
+     var das = _schemal.map(function(element){
+        var toSelect = '';
+
+        if(element.selector){ toSelect = element.selector; }else{ toSelect = element }
+
+        console.log(toSelect);
+
         var el = $(toSelect);
 
-        return el.map(function(i,element){
-          var finalValue = '';
+        if(element.children){
+          var children = objectToArray(element.children);
 
-          if(element.attr){ //return attribute value
-            finalValue = el.attr(element.attr);
-          }else{
-            finalValue = el.text();
-          }
+          return { toSelect: children.map(function(child){
+                          console.log(child);
+                          return engine(el,child)  // return object
+                        })
+                 };
+        }
 
-          if(element.children){
-            return {value: finalValue , children: engine(el,element.children) }; // return object
-          }
-          return finalValue;
-        });
-        
+        if(element.attr) return { toSelect: el.attr(element.attr)};
+
+        return { toSelect: el.text() }
+
+
       });
 
     }
